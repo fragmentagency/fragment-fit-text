@@ -217,7 +217,7 @@ var FitTextElement = function () {
             this.calculateLineHeight();
 
             var sizeRatios = this.testElementRatios();
-            if (sizeRatios.height >= 1 || sizeRatios.width > 1) {
+            if (sizeRatios.height > 1 || sizeRatios.width > 1) {
                 currentFontSize = oldFontSize;
                 break;
             } else {
@@ -231,8 +231,11 @@ var FitTextElement = function () {
 
     FitTextElement.prototype.testElementRatios = function testElementRatios() {
         if (this.oneLine) {
+            var computedStyle = getComputedStyle(this.testTag);
+            var elementHeight = this.testTag.clientHeight; //height with padding
+            elementHeight -= parseFloat(computedStyle.paddingTop) + parseFloat(computedStyle.paddingBottom);
             return {
-                height: this.testTag.offsetHeight / this.lineHeight,
+                height: elementHeight / this.lineHeight,
                 width: this.testTag.scrollWidth / this.element.offsetWidth
             };
         } else {
@@ -245,11 +248,6 @@ var FitTextElement = function () {
 
     FitTextElement.prototype.addTestTag = function addTestTag() {
 
-        var paddingTop = parseFloat(window.getComputedStyle(this.element, null).getPropertyValue('padding-top'));
-        var paddingLeft = parseFloat(window.getComputedStyle(this.element, null).getPropertyValue('padding-left'));
-        var paddingRight = parseFloat(window.getComputedStyle(this.element, null).getPropertyValue('padding-right'));
-        var paddingBottom = parseFloat(window.getComputedStyle(this.element, null).getPropertyValue('padding-bottom'));
-
         this.testTag = document.createElement('span');
         this.testTag.innerHTML = this.element.innerHTML;
         this.testTag.style.width = 'auto';
@@ -259,10 +257,10 @@ var FitTextElement = function () {
         this.testTag.style.fontSize = this.minSize + 'px';
         this.testTag.style.visibility = 'hidden';
         this.testTag.style.padding = 0;
-        this.testTag.style.paddingTop = paddingTop + 'px';
-        this.testTag.style.paddingLeft = paddingLeft + 'px';
-        this.testTag.style.paddingRight = paddingRight + 'px';
-        this.testTag.style.paddingBottom = paddingBottom + 'px';
+        this.testTag.style.paddingTop = this.getStyle('padding-top') + 'px';
+        this.testTag.style.paddingLeft = this.getStyle('padding-left') + 'px';
+        this.testTag.style.paddingRight = this.getStyle('padding-right') + 'px';
+        this.testTag.style.paddingBottom = this.getStyle('padding-bottom') + 'px';
         this.element.appendChild(this.testTag);
     };
 
@@ -280,9 +278,13 @@ var FitTextElement = function () {
         charsElement.style.visibility = 'hidden';
         charsElement.style.overflow = 'hidden';
         charsElement.style.whiteSpace = 'nowrap';
-        this.element.appendChild(charsElement);
+        this.testTag.appendChild(charsElement);
         this.lineHeight = charsElement.offsetHeight;
-        this.element.removeChild(charsElement);
+        this.testTag.removeChild(charsElement);
+    };
+
+    FitTextElement.prototype.getStyle = function getStyle(property) {
+        return parseFloat(window.getComputedStyle(this.element, null).getPropertyValue(property));
     };
 
     return FitTextElement;
@@ -305,7 +307,7 @@ var FitText = function () {
 
     FitText.prototype.add = function add(element) {
         var oneLine = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-        var minSize = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
+        var minSize = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1;
         var maxSize = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 99;
 
         this.elements.push(new FitTextElement(element, oneLine, minSize, maxSize));

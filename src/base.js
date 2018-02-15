@@ -21,12 +21,12 @@ class FitTextElement {
         let currentFontSize = this.minSize
         let oldFontSize = this.minSize
 
-        for (var i = this.minSize; i < this.maxSize; i++) {
+        for (let i = this.minSize; i < this.maxSize; i++) {
             this.testTag.style.fontSize = currentFontSize + 'px'
             this.calculateLineHeight()
 
             let sizeRatios = this.testElementRatios()
-            if (sizeRatios.height >= 1 || sizeRatios.width > 1) {
+            if (sizeRatios.height > 1 || sizeRatios.width > 1) {
                 currentFontSize = oldFontSize
                 break
             } else {
@@ -40,8 +40,11 @@ class FitTextElement {
 
     testElementRatios() {
         if (this.oneLine) {
+            let computedStyle = getComputedStyle(this.testTag);
+            let elementHeight = this.testTag.clientHeight; //height with padding
+            elementHeight -= parseFloat(computedStyle.paddingTop) + parseFloat(computedStyle.paddingBottom);
             return {
-                height: this.testTag.offsetHeight / this.lineHeight,
+                height: elementHeight / this.lineHeight,
                 width: this.testTag.scrollWidth / this.element.offsetWidth
             }
         } else {
@@ -54,11 +57,6 @@ class FitTextElement {
 
     addTestTag() {
 
-        let paddingTop = parseFloat(window.getComputedStyle(this.element, null).getPropertyValue('padding-top'))
-        let paddingLeft = parseFloat(window.getComputedStyle(this.element, null).getPropertyValue('padding-left'))
-        let paddingRight = parseFloat(window.getComputedStyle(this.element, null).getPropertyValue('padding-right'))
-        let paddingBottom = parseFloat(window.getComputedStyle(this.element, null).getPropertyValue('padding-bottom'))
-
         this.testTag = document.createElement('span')
         this.testTag.innerHTML = this.element.innerHTML
         this.testTag.style.width = 'auto'
@@ -68,10 +66,10 @@ class FitTextElement {
         this.testTag.style.fontSize = this.minSize + 'px'
         this.testTag.style.visibility = 'hidden'
         this.testTag.style.padding = 0
-        this.testTag.style.paddingTop = paddingTop + 'px'
-        this.testTag.style.paddingLeft = paddingLeft + 'px'
-        this.testTag.style.paddingRight = paddingRight + 'px'
-        this.testTag.style.paddingBottom = paddingBottom + 'px'
+        this.testTag.style.paddingTop = this.getStyle('padding-top') + 'px'
+        this.testTag.style.paddingLeft = this.getStyle('padding-left') + 'px'
+        this.testTag.style.paddingRight = this.getStyle('padding-right') + 'px'
+        this.testTag.style.paddingBottom = this.getStyle('padding-bottom') + 'px'
         this.element.appendChild(this.testTag)
     }
 
@@ -89,9 +87,13 @@ class FitTextElement {
         charsElement.style.visibility = 'hidden'
         charsElement.style.overflow = 'hidden'
         charsElement.style.whiteSpace = 'nowrap'
-        this.element.appendChild(charsElement)
+        this.testTag.appendChild(charsElement)
         this.lineHeight = charsElement.offsetHeight;
-        this.element.removeChild(charsElement)
+        this.testTag.removeChild(charsElement)
+    }
+
+    getStyle(property) {
+        return parseFloat(window.getComputedStyle(this.element, null).getPropertyValue(property))
     }
 
 }
@@ -108,7 +110,7 @@ class FitText {
         }
     }
 
-    add(element, oneLine = false, minSize = 0, maxSize = 99) {
+    add(element, oneLine = false, minSize = 1, maxSize = 99) {
         this.elements.push(new FitTextElement(element, oneLine, minSize, maxSize))
     }
 
