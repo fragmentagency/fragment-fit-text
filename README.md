@@ -39,7 +39,7 @@ fragmentFitText.run(['Permanent Marker', 'Pacifico'])
 If you're using npm you can install Font Face Observer as a dependency:
 
 ```shell
-$ npm install fragment-fit-text3
+$ npm install fragment-fit-text
 ```
 
 If you're not using npm, grab `fragmentFitText.js` or `fragmentFitText.min.js` and include it in your project.
