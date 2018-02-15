@@ -204,7 +204,7 @@ var FitTextElement = function () {
         this.addTestTag();
         var size = this.calculateSize();
         this.element.style.fontSize = size + 'px';
-        // this.removeTestTag()
+        this.removeTestTag();
     };
 
     FitTextElement.prototype.calculateSize = function calculateSize() {

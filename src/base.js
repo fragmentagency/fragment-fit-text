@@ -13,7 +13,7 @@ class FitTextElement {
         this.addTestTag()
         let size = this.calculateSize()
         this.element.style.fontSize = size + 'px'
-        // this.removeTestTag()
+        this.removeTestTag()
     }
 
     calculateSize() {
