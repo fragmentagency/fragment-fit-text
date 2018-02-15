@@ -1,0 +1,11 @@
+{
+    "presets": ["es2015"],
+    "ignore": [
+        "**/*/fontfaceobserver.js"
+    ],
+    "plugins": [
+        ["transform-es2015-classes", {
+            "loose": true
+        }]
+    ]
+}

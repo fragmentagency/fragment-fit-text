@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fragment Fit Text</title>
+    <link rel="stylesheet" href="styles.css">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body>
+
+<div class="wrapper">
+    <div class="text1" fit-text one-line min-size="10" max-size="100">
+        Lorem ipsum dolor sit amet
+    </div>
+
+    <div class="text2" fit-text>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce libero nunc, sollicitudin rutrum fermentum condimentum, sodales at felis.
+    </div>
+
+    <div class="text3">
+        Lorem <strong>ipsum dolor sit amet</strong>, consectetur adipiscing elit. <strong>Fusce libero nunc</strong>, sollicitudin rutrum fermentum <strong>condimentum, sodales</strong> at felis.
+    </div>
+</div>
+
+<script src="../fragmentFitText.min.js"></script>
+<script>
+    var fragmentFitText = new FitText('[fit-text]')
+    fragmentFitText.add(document.querySelector('.text3'), false, 10, 20);
+    fragmentFitText.run(['Permanent Marker', 'Pacifico'])
+    console.log(fragmentFitText);
+</script>
+</body>
+</html>

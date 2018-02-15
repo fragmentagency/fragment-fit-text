@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css?family=Pacifico|Permanent+Marker');
+
+.wrapper{
+    position: relative;
+    margin: 30px;
+    width: 200px;
+    height: 600px;
+    background: yellow;
+}
+
+.text1{
+    position: absolute;
+    top: 100px;
+    left: 20px;
+    right: 20px;
+    height: 60px;
+    background: orange;
+    font-weight: bold;
+    font-family: 'Permanent Marker', cursive;
+}
+
+.text2{
+    position: absolute;
+    top: 200px;
+    left: 20px;
+    right: 20px;
+    height: 80px;
+    background: orange;
+    font-family: 'Pacifico', cursive;
+}
+
+.text3{
+    position: absolute;
+    top: 370px;
+    left: 20px;
+    right: 20px;
+    height: 80px;
+    background: orange;
+    resize: both;
+    overflow: auto;
+}
