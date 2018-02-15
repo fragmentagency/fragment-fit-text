@@ -51,3 +51,15 @@
     font-weight: bold;
     font-family: 'Permanent Marker', cursive;
 }
+
+.text5{
+    position: absolute;
+    top: 590px;
+    left: 20px;
+    width: 70px;
+    height: 80px;
+    padding: 10px;
+    background: orange;
+    font-weight: bold;
+    font-family: 'Permanent Marker', cursive;
+}

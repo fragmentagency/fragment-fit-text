@@ -204,7 +204,7 @@ var FitTextElement = function () {
         this.addTestTag();
         var size = this.calculateSize();
         this.element.style.fontSize = size + 'px';
-        this.removeTestTag();
+        // this.removeTestTag()
     };
 
     FitTextElement.prototype.calculateSize = function calculateSize() {
@@ -244,6 +244,12 @@ var FitTextElement = function () {
     };
 
     FitTextElement.prototype.addTestTag = function addTestTag() {
+
+        var paddingTop = parseFloat(window.getComputedStyle(this.element, null).getPropertyValue('padding-top'));
+        var paddingLeft = parseFloat(window.getComputedStyle(this.element, null).getPropertyValue('padding-left'));
+        var paddingRight = parseFloat(window.getComputedStyle(this.element, null).getPropertyValue('padding-right'));
+        var paddingBottom = parseFloat(window.getComputedStyle(this.element, null).getPropertyValue('padding-bottom'));
+
         this.testTag = document.createElement('span');
         this.testTag.innerHTML = this.element.innerHTML;
         this.testTag.style.width = 'auto';
@@ -252,6 +258,11 @@ var FitTextElement = function () {
         this.testTag.style.left = 0;
         this.testTag.style.fontSize = this.minSize + 'px';
         this.testTag.style.visibility = 'hidden';
+        this.testTag.style.padding = 0;
+        this.testTag.style.paddingTop = paddingTop + 'px';
+        this.testTag.style.paddingLeft = paddingLeft + 'px';
+        this.testTag.style.paddingRight = paddingRight + 'px';
+        this.testTag.style.paddingBottom = paddingBottom + 'px';
         this.element.appendChild(this.testTag);
     };
 

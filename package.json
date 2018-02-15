@@ -1,6 +1,6 @@
 {
   "name": "fragment-fit-text",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Fit text to a container",
   "main": "fragmentFitText.js",
   "repository": "https://github.com/fragmentagency/fragment-fit-text.git",

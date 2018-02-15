@@ -13,7 +13,7 @@ class FitTextElement {
         this.addTestTag()
         let size = this.calculateSize()
         this.element.style.fontSize = size + 'px'
-        this.removeTestTag()
+        // this.removeTestTag()
     }
 
     calculateSize() {
@@ -53,6 +53,12 @@ class FitTextElement {
     }
 
     addTestTag() {
+
+        let paddingTop = parseFloat(window.getComputedStyle(this.element, null).getPropertyValue('padding-top'))
+        let paddingLeft = parseFloat(window.getComputedStyle(this.element, null).getPropertyValue('padding-left'))
+        let paddingRight = parseFloat(window.getComputedStyle(this.element, null).getPropertyValue('padding-right'))
+        let paddingBottom = parseFloat(window.getComputedStyle(this.element, null).getPropertyValue('padding-bottom'))
+
         this.testTag = document.createElement('span')
         this.testTag.innerHTML = this.element.innerHTML
         this.testTag.style.width = 'auto'
@@ -61,6 +67,11 @@ class FitTextElement {
         this.testTag.style.left = 0
         this.testTag.style.fontSize = this.minSize + 'px'
         this.testTag.style.visibility = 'hidden'
+        this.testTag.style.padding = 0
+        this.testTag.style.paddingTop = paddingTop + 'px'
+        this.testTag.style.paddingLeft = paddingLeft + 'px'
+        this.testTag.style.paddingRight = paddingRight + 'px'
+        this.testTag.style.paddingBottom = paddingBottom + 'px'
         this.element.appendChild(this.testTag)
     }
 
