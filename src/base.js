@@ -25,28 +25,30 @@ class FitTextElement {
             this.testTag.style.fontSize = currentFontSize + 'px'
             this.calculateLineHeight()
 
-            let percentageCompleted = this.testElementPortion()
-            if (percentageCompleted >= 1) {
+            let sizeRatios = this.testElementRatios()
+            if (sizeRatios.height >= 1 || sizeRatios.width > 1) {
                 currentFontSize = oldFontSize
                 break
             } else {
                 oldFontSize = currentFontSize
-                if (percentageCompleted < .5) { // if we aren't there... let's speed it up
-                    currentFontSize = currentFontSize + 2
-                } else {
-                    currentFontSize++
-                }
+                currentFontSize++
             }
         }
 
         return currentFontSize
     }
 
-    testElementPortion() {
+    testElementRatios() {
         if (this.oneLine) {
-            return this.testTag.offsetHeight / this.lineHeight
+            return {
+                height: this.testTag.offsetHeight / this.lineHeight,
+                width: this.testTag.scrollWidth / this.element.offsetWidth
+            }
         } else {
-            return this.testTag.offsetHeight / this.element.offsetHeight
+            return {
+                height: this.testTag.offsetHeight / this.element.offsetHeight,
+                width: this.testTag.scrollWidth / this.element.offsetWidth
+            }
         }
     }
 
@@ -56,7 +58,6 @@ class FitTextElement {
         this.testTag.style.width = 'auto'
         this.testTag.style.position = 'absolute'
         this.testTag.style.top = 0
-        this.testTag.style.right = 0
         this.testTag.style.left = 0
         this.testTag.style.fontSize = this.minSize + 'px'
         this.testTag.style.visibility = 'hidden'

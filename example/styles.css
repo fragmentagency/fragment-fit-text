@@ -4,7 +4,7 @@
     position: relative;
     margin: 30px;
     width: 200px;
-    height: 600px;
+    height: 700px;
     background: yellow;
 }
 
@@ -38,4 +38,16 @@
     background: orange;
     resize: both;
     overflow: auto;
+}
+
+
+.text4{
+    position: absolute;
+    top: 500px;
+    left: 20px;
+    width: 70px;
+    height: 80px;
+    background: orange;
+    font-weight: bold;
+    font-family: 'Permanent Marker', cursive;
 }

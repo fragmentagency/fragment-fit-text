@@ -40,5 +40,5 @@ gulp.task('watch', function() {
     connect.server({
         livereload: true
     });
-    gulp.watch(['js/*.js'], ['scripts']);
+    gulp.watch(['src/*.js'], ['scripts']);
 });

@@ -19,14 +19,17 @@
     <div class="text3">
         Lorem <strong>ipsum dolor sit amet</strong>, consectetur adipiscing elit. <strong>Fusce libero nunc</strong>, sollicitudin rutrum fermentum <strong>condimentum, sodales</strong> at felis.
     </div>
+
+    <div class="text4" fit-text>
+        <font>You</font>® something <font>veryverylongword</font>
+    </div>
 </div>
 
-<script src="../fragmentFitText.min.js"></script>
+<script src="../fragmentFitText.js"></script>
 <script>
     var fragmentFitText = new FitText('[fit-text]')
     fragmentFitText.add(document.querySelector('.text3'), false, 10, 20);
     fragmentFitText.run(['Permanent Marker', 'Pacifico'])
-    console.log(fragmentFitText);
 </script>
 </body>
 </html>
