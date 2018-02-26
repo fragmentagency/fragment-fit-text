@@ -191,20 +191,24 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var characters = 'ABCĆDEFGHIJKLMNOPQRSŠTUVWXYZŽabcćdefghijklmnopqrsštuvwxyzž1234567890‘?’“!”(%)[#]{@}/&\<-+÷×=>®©$€£¥¢:;,.*';
 
 var FitTextElement = function () {
-    function FitTextElement(element, oneLine, minSize, maxSize) {
+    function FitTextElement(element, type, minSize, maxSize) {
         _classCallCheck(this, FitTextElement);
 
         this.element = element;
-        this.oneLine = element.hasAttribute('one-line') ? element.hasAttribute('one-line') : oneLine;
+        this.type = element.hasAttribute('type') ? element.getAttribute('type') : type;
         this.minSize = element.hasAttribute('min-size') ? parseInt(element.getAttribute('min-size')) : minSize;
         this.maxSize = element.hasAttribute('max-size') ? parseInt(element.getAttribute('max-size')) : maxSize;
     }
 
     FitTextElement.prototype.fit = function fit() {
+        var position = this.element.style.position;
+        this.element.style.position = 'relative';
         this.addTestTag();
+        this.calculateLineHeight();
         var size = this.calculateSize();
         this.element.style.fontSize = size + 'px';
         this.removeTestTag();
+        this.element.style.position = position;
     };
 
     FitTextElement.prototype.calculateSize = function calculateSize() {
@@ -214,9 +218,14 @@ var FitTextElement = function () {
 
         for (var i = this.minSize; i < this.maxSize; i++) {
             this.testTag.style.fontSize = currentFontSize + 'px';
-            this.calculateLineHeight();
+
+            if (this.type !== 'oneline-height') {
+                this.calculateLineHeight();
+            }
 
             var sizeRatios = this.testElementRatios();
+
+            console.log(this.element.className + ' - ', sizeRatios);
             if (sizeRatios.height > 1 || sizeRatios.width > 1) {
                 currentFontSize = oldFontSize;
                 break;
@@ -230,7 +239,7 @@ var FitTextElement = function () {
     };
 
     FitTextElement.prototype.testElementRatios = function testElementRatios() {
-        if (this.oneLine) {
+        if (['oneline-width', 'oneline-height'].indexOf(this.type) !== -1) {
             var computedStyle = getComputedStyle(this.testTag);
             var elementHeight = this.testTag.clientHeight; //height with padding
             elementHeight -= parseFloat(computedStyle.paddingTop) + parseFloat(computedStyle.paddingBottom);
@@ -269,18 +278,26 @@ var FitTextElement = function () {
     };
 
     FitTextElement.prototype.calculateLineHeight = function calculateLineHeight() {
-        var charsElement = document.createElement('span');
-        charsElement.textContent = characters;
-        charsElement.style.width = 'auto';
-        charsElement.style.position = 'absolute';
-        charsElement.style.left = 0;
-        charsElement.style.top = 0;
-        charsElement.style.visibility = 'hidden';
-        charsElement.style.overflow = 'hidden';
-        charsElement.style.whiteSpace = 'nowrap';
-        this.testTag.appendChild(charsElement);
-        this.lineHeight = charsElement.offsetHeight;
-        this.testTag.removeChild(charsElement);
+
+        if (this.type == 'online-height') {
+            var computedStyle = getComputedStyle(this.element);
+            var elementHeight = this.element.clientHeight; //height with padding
+            elementHeight -= parseFloat(computedStyle.paddingTop) + parseFloat(computedStyle.paddingBottom);
+            this.lineHeight = elementHeight;
+        } else {
+            var charsElement = document.createElement('span');
+            charsElement.textContent = characters;
+            charsElement.style.width = 'auto';
+            charsElement.style.position = 'absolute';
+            charsElement.style.left = 0;
+            charsElement.style.top = 0;
+            charsElement.style.visibility = 'hidden';
+            charsElement.style.overflow = 'hidden';
+            charsElement.style.whiteSpace = 'nowrap';
+            this.testTag.appendChild(charsElement);
+            this.lineHeight = charsElement.offsetHeight;
+            this.testTag.removeChild(charsElement);
+        }
     };
 
     FitTextElement.prototype.getStyle = function getStyle(property) {
@@ -306,11 +323,15 @@ var FitText = function () {
     }
 
     FitText.prototype.add = function add(element) {
-        var oneLine = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+        var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'default';
         var minSize = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1;
         var maxSize = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 99;
 
-        this.elements.push(new FitTextElement(element, oneLine, minSize, maxSize));
+        if (!element) {
+            console.log('FitText: The element was not found');
+            return;
+        }
+        this.elements.push(new FitTextElement(element, type, minSize, maxSize));
     };
 
     FitText.prototype.run = function run(fontsToWaitFor) {

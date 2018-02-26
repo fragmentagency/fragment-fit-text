@@ -1,66 +1,78 @@
 @import url('https://fonts.googleapis.com/css?family=Pacifico|Permanent+Marker');
 
-.wrapper{
-    position: relative;
-    margin: 30px;
+.wrapper
+{
     width: 200px;
-    height: 700px;
+    margin: 30px;
+    padding: 30px;
+
     background: yellow;
 }
 
-.text1{
-    position: absolute;
-    top: 100px;
-    left: 20px;
-    right: 20px;
-    height: 60px;
-    background: orange;
-    font-weight: bold;
+.text1
+{
     font-family: 'Permanent Marker', cursive;
+    font-weight: bold;
+
+    right: 20px;
+
+    height: 60px;
+    margin-bottom: 30px;
+
+    background: orange;
 }
 
-.text2{
-    position: absolute;
-    top: 200px;
-    left: 20px;
-    right: 20px;
-    height: 80px;
-    background: orange;
+.text2
+{
     font-family: 'Pacifico', cursive;
-}
-
-.text3{
-    position: absolute;
-    top: 370px;
-    left: 20px;
-    right: 20px;
+    
     height: 80px;
+    margin-bottom: 30px;
+
     background: orange;
-    resize: both;
+}
+
+.text3
+{
     overflow: auto;
+
+    height: 80px;
+    margin-bottom: 30px;
+
+    resize: both;
+
+    background: orange;
 }
 
 
-.text4{
-    position: absolute;
-    top: 500px;
-    left: 20px;
+.text4
+{
+    font-family: 'Permanent Marker', cursive;
+    font-weight: bold;
+
     width: 70px;
     height: 80px;
+    margin-bottom: 30px;
+
     background: orange;
-    font-weight: bold;
-    font-family: 'Permanent Marker', cursive;
 }
 
-.text5{
-    background: red;
-    border-radius:6px;
-    position: absolute;
-    top: 590px;
-    left: 20px;
-
-    padding: 6px;
+.text5
+{
     width: 110px;
     height: 28px;
+    margin-bottom: 30px;
+    padding: 6px;
     padding-right: 20px;
+
+    border-radius: 6px;
+    background: red;
+}
+
+.text6
+{
+    width: 60px;
+    height: 30px;
+
+    background: green;
 }
