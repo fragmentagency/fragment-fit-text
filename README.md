@@ -22,12 +22,12 @@ var fragmentFitText = new FitText('[fit-text]')
 Otherwise, to add elements you’ll have to use the `add` method:
 
 ```js
-fragmentFitText.add(document.querySelector('.text3'), 'default', 10, 20);
+fragmentFitText.add('.text3', 'default', 10, 20, 1);
 ```
 
-where the first parameter is the element, the second defines the type of content fit, the third the *min size* and the fourth the *max size*.
+where the first parameter is the selector for the element, the second defines the type of content fit, the third the *min size*, the fourth the *max size* and the fifth *line height*.
 
-Keep in mind that the element attributes *type*, *min-size=“X”* and *max-size=“Y”* will override these parameteres.
+Keep in mind that the element attributes *type*, *min-size=“X”*, *max-size=“Y”* and *line-height="Z"* will override these parameteres.
 
 #### Types
 - **default** will make the content fit within the width and height limits
@@ -36,8 +36,10 @@ Keep in mind that the element attributes *type*, *min-size=“X”* and *max-siz
 
 Finally, you have to call the `run` method of the object. You can pass a `string` or an `array` with the names of the fonts that need to be loaded before executing the code.
 
+The second argument for the run function is a callback.
+
 ```js
-fragmentFitText.run(['Permanent Marker', 'Pacifico'])
+fragmentFitText.run(['Permanent Marker', 'Pacifico'], () => {})
 ```
 
 ## Installation

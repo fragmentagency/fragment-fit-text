@@ -12,7 +12,7 @@
         Lorem ipsum dolor sit amet
     </div>
 
-    <div class="text2" fit-text>
+    <div class="text2" fit-text line-height="1.4">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce libero nunc, sollicitudin rutrum fermentum condimentum, sodales at felis.
     </div>
 
@@ -31,12 +31,16 @@
     <div class="text6" fit-text type="online-height" min-size="10" max-size="40">
         00
     </div>
+
+    <div class="text7" fit-text line-height="1.4">
+        This is and + 0/min
+    </div>
 </div>
 
 <script src="../fragmentFitText.js"></script>
 <script>
     var fragmentFitText = new FitText('[fit-text]')
-    fragmentFitText.add(document.querySelector('.text3'), 'default', 10, 20);
+    fragmentFitText.add('.text3', 'default', 10, 20);
     fragmentFitText.run(['Permanent Marker', 'Pacifico'])
 </script>
 </body>

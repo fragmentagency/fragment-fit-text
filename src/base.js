@@ -2,11 +2,16 @@ const characters = 'ABCĆDEFGHIJKLMNOPQRSŠTUVWXYZŽabcćdefghijklmnopqrsštuvwx
 
 class FitTextElement {
 
-    constructor(element, type, minSize, maxSize) {
+    constructor(element, type, minSize, maxSize, textLineHeight) {
         this.element = element
         this.type = element.hasAttribute('type') ? element.getAttribute('type') : type
         this.minSize = element.hasAttribute('min-size') ? parseInt(element.getAttribute('min-size')) : minSize
         this.maxSize = element.hasAttribute('max-size') ? parseInt(element.getAttribute('max-size')) : maxSize
+        this.textLineHeight = element.hasAttribute('line-height') ? parseFloat(element.getAttribute('line-height')) : textLineHeight
+        this.size = {
+            width: this.element.offsetWidth,
+            height: this.element.offsetHeight,
+        }
     }
 
     fit() {
@@ -25,16 +30,17 @@ class FitTextElement {
         let currentFontSize = this.minSize
         let oldFontSize = this.minSize
 
+        this.testTag.style.fontSize = this.minSize + 'px'
+
         for (let i = this.minSize; i < this.maxSize; i++) {
-            this.testTag.style.fontSize = currentFontSize + 'px'
+            this.testTag.style.fontSize = (currentFontSize + 'px')
+            this.testTag.style.lineHeight = (currentFontSize * this.textLineHeight) + 'px';
 
             if (this.type !== 'oneline-height') {
                 this.calculateLineHeight()
             }
 
             let sizeRatios = this.testElementRatios()
-
-            console.log(this.element.className + ' - ', sizeRatios)
             if (sizeRatios.height > 1 || sizeRatios.width > 1) {
                 currentFontSize = oldFontSize
                 break
@@ -43,7 +49,6 @@ class FitTextElement {
                 currentFontSize++
             }
         }
-
         return currentFontSize
     }
 
@@ -54,12 +59,12 @@ class FitTextElement {
             elementHeight -= parseFloat(computedStyle.paddingTop) + parseFloat(computedStyle.paddingBottom);
             return {
                 height: elementHeight / this.lineHeight,
-                width: this.testTag.scrollWidth / this.element.offsetWidth
+                width: this.testTag.scrollWidth / this.size.width
             }
         } else {
             return {
-                height: this.testTag.offsetHeight / this.element.offsetHeight,
-                width: this.testTag.scrollWidth / this.element.offsetWidth
+                height: this.testTag.offsetHeight / this.size.height,
+                width: this.testTag.scrollWidth / this.size.width
             }
         }
     }
@@ -68,13 +73,13 @@ class FitTextElement {
 
         this.testTag = document.createElement('span')
         this.testTag.innerHTML = this.element.innerHTML
+        this.testTag.style.backgroundColor = 'purple'
         this.testTag.style.width = 'auto'
         this.testTag.style.position = 'absolute'
         this.testTag.style.top = 0
         this.testTag.style.left = 0
         this.testTag.style.fontSize = this.minSize + 'px'
         this.testTag.style.visibility = 'hidden'
-        this.testTag.style.padding = 0
         this.testTag.style.paddingTop = this.getStyle('padding-top') + 'px'
         this.testTag.style.paddingLeft = this.getStyle('padding-left') + 'px'
         this.testTag.style.paddingRight = this.getStyle('padding-right') + 'px'
@@ -88,12 +93,12 @@ class FitTextElement {
 
     calculateLineHeight() {
 
-        if (this.type == 'online-height') {
+        if (this.type == 'oneline-height') {
             let computedStyle = getComputedStyle(this.element);
-            let elementHeight = this.element.clientHeight; //height with padding
+            let elementHeight = this.element.clientHeight;
             elementHeight -= parseFloat(computedStyle.paddingTop) + parseFloat(computedStyle.paddingBottom);
             this.lineHeight = elementHeight
-        } else {
+        } else if (this.type == 'oneline-width') {
             let charsElement = document.createElement('span')
             charsElement.textContent = characters
             charsElement.style.width = 'auto'
@@ -103,9 +108,11 @@ class FitTextElement {
             charsElement.style.visibility = 'hidden'
             charsElement.style.overflow = 'hidden'
             charsElement.style.whiteSpace = 'nowrap'
-            this.testTag.appendChild(charsElement)
+            this.element.appendChild(charsElement)
             this.lineHeight = charsElement.offsetHeight;
-            this.testTag.removeChild(charsElement)
+            this.element.removeChild(charsElement)
+        } else {
+            this.lineHeight = -1;
         }
     }
 
@@ -127,15 +134,21 @@ class FitText {
         }
     }
 
-    add(element, type = 'default', minSize = 1, maxSize = 99) {
-        if (!element) {
-            console.log('FitText: The element was not found');
-            return;
+    add(selector, type = 'default', minSize = 1, maxSize = 99, textLineHeight = 1) {
+        let element;
+        if (typeof selector == 'string') {
+            element = document.querySelector(selector)
+            if (!element) {
+                console.log('FitText: The element "' + selector + '" was not found');
+                return;
+            }
+        } else {
+            element = selector
         }
-        this.elements.push(new FitTextElement(element, type, minSize, maxSize))
+        this.elements.push(new FitTextElement(element, type, minSize, maxSize, textLineHeight))
     }
 
-    run(fontsToWaitFor) {
+    run(fontsToWaitFor, callback) {
         if (typeof fontsToWaitFor == 'string') {
             let font = new FontFaceObserver(fontsToWaitFor)
             font.load().then(() => {
@@ -149,9 +162,15 @@ class FitText {
             })
             Promise.all(fonts).then(() => {
                 this._run()
+                if (callback) {
+                    callback()
+                }
             })
         } else {
             this._run()
+            if (callback) {
+                callback()
+            }
         }
     }
 
