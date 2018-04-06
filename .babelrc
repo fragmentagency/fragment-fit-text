@@ -1,7 +1,7 @@
 {
     "presets": ["es2015"],
     "ignore": [
-        "**/*/fontfaceobserver.js"
+        "node_modules/**"
     ],
     "plugins": [
         ["transform-es2015-classes", {

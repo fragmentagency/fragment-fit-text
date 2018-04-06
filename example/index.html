@@ -12,6 +12,7 @@
         Lorem ipsum dolor sit amet
     </div>
 
+
     <div class="text2" fit-text line-height="1.4">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce libero nunc, sollicitudin rutrum fermentum condimentum, sodales at felis.
     </div>
@@ -25,10 +26,10 @@
     </div>
 
     <div class="text5" fit-text type="oneline-width">
-        <font>Info & Things</font>
+        info
     </div>
 
-    <div class="text6" fit-text type="online-height" min-size="10" max-size="40">
+    <div class="text6" fit-text type="oneline-height" min-size="10" max-size="40">
         00
     </div>
 
@@ -37,11 +38,19 @@
     </div>
 </div>
 
-<script src="../fragmentFitText.js"></script>
+<script src="../node_modules/webfontloader/webfontloader.js"></script>
+<script src="../src/base.js"></script>
 <script>
     var fragmentFitText = new FitText('[fit-text]')
     fragmentFitText.add('.text3', 'default', 10, 20);
-    fragmentFitText.run(['Permanent Marker', 'Pacifico'])
+    document.querySelectorAll('[fit-text]').forEach((e) => {
+        e.style.opacity = 0
+    })
+    fragmentFitText.run(['Permanent Marker', 'Pacifico'], () => {
+        document.querySelectorAll('[fit-text]').forEach((e) => {
+            e.style.opacity = 1
+        })
+    })
 </script>
 </body>
 </html>

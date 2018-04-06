@@ -37,7 +37,7 @@ class FitTextElement {
             this.testTag.style.lineHeight = (currentFontSize * this.textLineHeight) + 'px';
 
             if (this.type !== 'oneline-height') {
-                this.calculateLineHeight()
+                this.calculateLineHeight(currentFontSize)
             }
 
             let sizeRatios = this.testElementRatios()
@@ -53,7 +53,15 @@ class FitTextElement {
     }
 
     testElementRatios() {
-        if (['oneline-width', 'oneline-height'].indexOf(this.type) !== -1) {
+        if (['oneline-height'].indexOf(this.type) !== -1) {
+            let computedStyle = getComputedStyle(this.testTag);
+            let elementHeight = this.testTag.clientHeight; //height with padding
+            elementHeight -= parseFloat(computedStyle.paddingTop) + parseFloat(computedStyle.paddingBottom);
+            return {
+                height: elementHeight / this.lineHeight,
+                width: this.testTag.scrollWidth / this.size.width
+            }
+        } else if (['oneline-width'].indexOf(this.type) !== -1) {
             let computedStyle = getComputedStyle(this.testTag);
             let elementHeight = this.testTag.clientHeight; //height with padding
             elementHeight -= parseFloat(computedStyle.paddingTop) + parseFloat(computedStyle.paddingBottom);
@@ -91,7 +99,7 @@ class FitTextElement {
         this.element.removeChild(this.testTag)
     }
 
-    calculateLineHeight() {
+    calculateLineHeight(currentFontSize) {
 
         if (this.type == 'oneline-height') {
             let computedStyle = getComputedStyle(this.element);
@@ -108,6 +116,8 @@ class FitTextElement {
             charsElement.style.visibility = 'hidden'
             charsElement.style.overflow = 'hidden'
             charsElement.style.whiteSpace = 'nowrap'
+            charsElement.style.fontSize = (currentFontSize + 'px')
+            charsElement.style.lineHeight = (currentFontSize * this.textLineHeight) + 'px';
             this.element.appendChild(charsElement)
             this.lineHeight = charsElement.offsetHeight;
             this.element.removeChild(charsElement)
@@ -149,28 +159,34 @@ class FitText {
     }
 
     run(fontsToWaitFor, callback) {
-        if (typeof fontsToWaitFor == 'string') {
-            let font = new FontFaceObserver(fontsToWaitFor)
-            font.load().then(() => {
-                this._run()
-            })
-        } else if (fontsToWaitFor instanceof Array) {
-            let fonts = []
-            fontsToWaitFor.forEach((f) => {
-                let font = new FontFaceObserver(f)
-                fonts.push(font.load())
-            })
-            Promise.all(fonts).then(() => {
-                this._run()
-                if (callback) {
-                    callback()
-                }
-            })
-        } else {
+        if (!fontsToWaitFor) {
             this._run()
             if (callback) {
                 callback()
             }
+        } else {
+            let fonts = fontsToWaitFor
+            if (typeof fontsToWaitFor == 'string') {
+                fonts = [fontsToWaitFor]
+            }
+            WebFont.load({
+                custom: {
+                    families: fonts,
+                },
+                timeout: 20000,
+                active: () => {
+                    this._run()
+                    if (callback) {
+                        callback()
+                    }
+                },
+                inactive: () => {
+                    this._run()
+                    if (callback) {
+                        callback()
+                    }
+                }
+            })
         }
     }
 

@@ -61,14 +61,15 @@
 
 .text5
 {
-    width: 110px;
-    height: 28px;
+    font-family: 'Arial', cursive;
+    width: 120px;
+    height: 40px;
     margin-bottom: 30px;
-    padding: 6px;
-    padding-right: 20px;
 
     border-radius: 6px;
     background: red;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .text6

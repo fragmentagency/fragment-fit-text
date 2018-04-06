@@ -10,7 +10,7 @@ var util = require('gulp-util');
 
 gulp.task('scripts', () => {
     return gulp.src([
-            'node_modules/fontfaceobserver/fontfaceobserver.js',
+            'node_modules/webfontloader/webfontloader.js',
             'src/base.js',
         ])
         .pipe(concat('fragmentFitText.js'))
